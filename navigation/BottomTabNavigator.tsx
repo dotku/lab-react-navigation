@@ -36,7 +36,13 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
-        component={TabTwoNavigator}
+        component={() => null}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            console.log("tabPress tabTwo");
+          },
+        }}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -74,22 +80,10 @@ function TabOneNavigator() {
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
-  const navigation = useNavigation();
-
-  React.useEffect(() => {
-    navigation.dangerouslyGetParent()?.addListener("tabPress", (e) => {
-      console.log("TabPress 1");
-    });
-  }, []);
-
-  return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: "Tab Two Title" }}
-      />
-    </TabTwoStack.Navigator>
-  );
+function TabTwoNavigator({ navigation }) {
+  navigation.addListener("tabPress", (e) => {
+    e.preventDefault();
+    console.log("TabPress 1");
+  });
+  return null;
 }
